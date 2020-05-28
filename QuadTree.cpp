@@ -1,7 +1,5 @@
 #include <iostream>
 #include <conio.h>
-#include <render.h>
-
 using namespace std;
 
 #define size 200
@@ -52,7 +50,7 @@ struct QuadTree
 		level = level_;
 		boundary.x = pos.x;
 		boundary.y = pos.y;
-		boundary.w = s_/2;
+		boundary.w = s_/2.0;
 		if (level > 1)
 		{
 			vect2 centers[4];
@@ -80,16 +78,19 @@ struct QuadTree
 	}
 };
 
-Screen S(size, size);
+//Screen S(size+10, size+10);
 
 void show(QuadTree* qt)
 {
 	if (qt->level <= 1)
 	{
-		S.draw_path(qt->boundary.x - qt->boundary.w, qt->boundary.y - qt->boundary.w, qt->boundary.x - qt->boundary.w, qt->boundary.y + qt->boundary.w, 100, 100, 100);
-		S.draw_path(qt->boundary.x - qt->boundary.w, qt->boundary.y + qt->boundary.w, qt->boundary.x + qt->boundary.w, qt->boundary.y + qt->boundary.w, 100, 100, 100);
-		S.draw_path(qt->boundary.x + qt->boundary.w, qt->boundary.y + qt->boundary.w, qt->boundary.x + qt->boundary.w, qt->boundary.y - qt->boundary.w, 100, 100, 100);
-		S.draw_path(qt->boundary.x + qt->boundary.w, qt->boundary.y - qt->boundary.w, qt->boundary.x - qt->boundary.w, qt->boundary.y - qt->boundary.w, 100, 100, 100);
+		int X = qt->boundary.x;
+		int W = qt->boundary.w;
+		int Y = qt->boundary.y;
+//		S.draw_path(X - W, Y - W, X - W, Y + W, 100, 100, 0);
+//		S.draw_path(X - W, Y + W, X + W, Y + W, 100, 0, 100);
+//		S.draw_path(X + W, Y + W, X + W, Y - W, 0, 100, 100);
+//		S.draw_path(X + W, Y - W, X - W, Y - W, 100, 100, 100);
 	}
 	else
 	{
@@ -102,7 +103,26 @@ void show(QuadTree* qt)
 
 int main()
 {
-	QuadTree qt(3, vect2(size/2, size/2), size);
-	show(&qt);
+	QuadTree qt(1, vect2(size/2, size/2), size-10);
+//	show(&qt);
+		int X = 100;
+		int W = 100;
+		int Y = 50;
+//		for (int i=0; i<210; i++)
+//		{
+//			for (int j=0; j<210; j++)
+//			{
+//				S.put_pixel(i, j, i, j, 0);
+//			}
+//		}
+ 	initwindow(400, 300, "First Sample");
+    circle(100, 50, 40);
+//		S.put_pixel(100, 100, 100, 100, 100);
+//		S.draw_path(X - W, Y - W, X - W, Y + W, 100, 100, 0);
+//		S.draw_path(X - W, Y + W, X + W, Y + W, 100, 0, 100);
+//		S.draw_path(X + W, Y + W, X + W, Y - W, 0, 100, 100);
+//		S.draw_path(X + W, Y - W, X - W, Y - W, 100, 100, 100);
+//	S.Draw();
+	getch();
 	return 0;
 }
