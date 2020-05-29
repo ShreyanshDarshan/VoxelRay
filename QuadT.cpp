@@ -2,6 +2,9 @@
 #include<iostream>
 #include<conio.h>
 #include<stdlib.h>
+#include<fstream>
+
+using namespace std;
 
 #define size 500
 
@@ -101,8 +104,6 @@ struct QuadTree
 	}
 };
 
-//Screen S(size+10, size+10);
-
 void show(QuadTree* qt, SDL_Renderer* renderer)
 {
 	if (qt->numpoints > 0)
@@ -128,11 +129,27 @@ void show(QuadTree* qt, SDL_Renderer* renderer)
 
 int main(int argc, char* argv[])
 {
-	QuadTree qt(12, vect2(size/2, size/2), size-10);
+	QuadTree qt(12, vect2(size/2, size/2), size);
 	
-	for (int i=0; i<100; i++)
+	ifstream myfile ("testimg.txt");
+	if (myfile.is_open())
 	{
-		qt.insert(vect2(rand()%size, rand()%size));
+		for (int i=0; i<size; i++)
+		{
+			for (int j=0; j<size; j++)
+			{
+				char a;
+				myfile>>a;
+				if (a=='1')
+				{
+					qt.insert(vect2(i, size-j));//vect2(rand()%size, rand()%size));
+				}
+				
+//				else
+//				cout<<a;
+			}
+		}
+		myfile.close();
 	}
 	
 	getch();
@@ -150,7 +167,7 @@ int main(int argc, char* argv[])
                 SDL_RenderClear(renderer);
 
                 SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-                SDL_RenderDrawLine(renderer, 20, 40, 21, 41);
+//                SDL_RenderDrawLine(renderer, 20, 40, 21, 41);
 //                SDL_RenderDrawLine(renderer, 300, 240, 340, 240);
 //                SDL_RenderDrawLine(renderer, 340, 240, 320, 200);
                 show(&qt, renderer);
