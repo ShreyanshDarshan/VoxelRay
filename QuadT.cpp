@@ -1,7 +1,9 @@
 #include "SDL.h"
 #include<iostream>
+#include<conio.h>
+#include<stdlib.h>
 
-#define size 200
+#define size 500
 
 struct vect2
 {
@@ -52,6 +54,7 @@ struct QuadTree
 		boundary.x = pos.x;
 		boundary.y = pos.y;
 		boundary.w = s_/2.0;
+		numpoints = 0;
 	}
 	
 	void subdivide()
@@ -82,10 +85,19 @@ struct QuadTree
 			return;
 		}
 		
-		if (level <= 1)
+		if (level > 1)
 		{
-			subdivide();	
+			if (divided == false)
+			{
+				subdivide();
+			}
+			
+			for (int i=0; i<4; i++)
+			{
+				child[i]->insert(point);
+			}
 		}
+		numpoints++;
 	}
 };
 
@@ -104,7 +116,7 @@ void show(QuadTree* qt, SDL_Renderer* renderer)
 		SDL_RenderDrawLine(renderer, X + W, Y - W, X - W, Y - W);
 	}
 	
-	if (qt->level > 1)
+	if (qt->level > 1 && qt->divided)
 	{
 		for (int i=0; i<4; i++)
 		{
@@ -116,7 +128,14 @@ void show(QuadTree* qt, SDL_Renderer* renderer)
 
 int main(int argc, char* argv[])
 {
-	QuadTree qt(6, vect2(size/2, size/2), size-10);
+	QuadTree qt(12, vect2(size/2, size/2), size-10);
+	
+	for (int i=0; i<100; i++)
+	{
+		qt.insert(vect2(rand()%size, rand()%size));
+	}
+	
+	getch();
     if (SDL_Init(SDL_INIT_VIDEO) == 0) {
         SDL_Window* window = NULL;
         SDL_Renderer* renderer = NULL;
@@ -131,7 +150,7 @@ int main(int argc, char* argv[])
                 SDL_RenderClear(renderer);
 
                 SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-//                SDL_RenderDrawLine(renderer, 320, 200, 300, 240);
+                SDL_RenderDrawLine(renderer, 20, 40, 21, 41);
 //                SDL_RenderDrawLine(renderer, 300, 240, 340, 240);
 //                SDL_RenderDrawLine(renderer, 340, 240, 320, 200);
                 show(&qt, renderer);
